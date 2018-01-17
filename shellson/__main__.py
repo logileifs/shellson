@@ -3,22 +3,31 @@ import json
 import sys
 
 
+def json_to_dict(json_data):
+    return json.loads(json_data)
+
+
 def read_stdin():
-    incoming = sys.stdin.read()
-    return json.loads(incoming)
+    json_data = sys.stdin.read()
+    return json_data
 
 
-def main():
-    data = None
-    command = sys.argv[1]
-    parameter = sys.argv[2]
-    data = read_stdin()
-    if command == 'get-value':
-        print(json.dumps(data.get(parameter)))
+def main(command, key):
+    json_data = read_stdin()
+    data = json.loads(json_data)
+    value = data.get(key, None)
 
-    if command == 'get-type':
-        print(type(data.get(parameter)))
+    if command == 'get':
+        print(json.dumps(value))
+
+    if command == 'type':
+        print(str(type(value)))
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        command = sys.argv[1]
+        key = sys.argv[2]
+    except IndexError:
+        raise SystemExit('no command specified')
+    main(command, key)
