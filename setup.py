@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(
-    name='Shellson',
+    name='shellson',
     version='0.1.0',
     description='JSON command line parser',
     author='Logi og Fjalar',
