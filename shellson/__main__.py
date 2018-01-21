@@ -12,23 +12,32 @@ def read_stdin():
     json_data = sys.stdin.read()
     return json_data
 
-
-def main(command, key):
-    json_data = read_stdin()
-    data = json.loads(json_data)
-    value = data.get(key, None)
-
-    if command == 'get':
-        print(json.dumps(value))
-
-    if command == 'type':
-        print(str(type(value)))
+def read_file(file):
+	with open(file, 'r') as f:
+		data = json.load(f)
+	return data
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description='Parse json on command line', prog='shellson')
     parser.add_argument('command', help='get: to get value or type: to get type of value')
     parser.add_argument('key')
     parser.add_argument('-f', '--file', help='path of the json file to read')
     args = parser.parse_args()
-    main(args.command, args.key)
+    if args.file == None:
+    	json_data = read_stdin()
+    	data = json.loads(json_data)
+    else:
+    	data = read_file(args.file)
+
+    value = data.get(args.key, None)
+
+    if args.command == 'get':
+        print(json.dumps(value))
+
+    if args.command == 'type':
+        print(str(type(value)))
+
+
+if __name__ == '__main__':
+    main()
