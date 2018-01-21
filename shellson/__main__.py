@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import argparse
 import json
 import sys
 
@@ -25,9 +26,9 @@ def main(command, key):
 
 
 if __name__ == '__main__':
-    try:
-        command = sys.argv[1]
-        key = sys.argv[2]
-    except IndexError:
-        raise SystemExit('no command specified')
-    main(command, key)
+    parser = argparse.ArgumentParser(description='Parse json on command line', prog='shellson')
+    parser.add_argument('command', help='get: to get value or type: to get type of value')
+    parser.add_argument('key')
+    parser.add_argument('-f', '--file', help='path of the json file to read')
+    args = parser.parse_args()
+    main(args.command, args.key)
