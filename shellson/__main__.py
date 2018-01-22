@@ -12,10 +12,11 @@ def read_stdin():
     json_data = sys.stdin.read()
     return json_data
 
+
 def read_file(file):
-	with open(file, 'r') as f:
-		data = json.load(f)
-	return data
+    with open(file, 'r') as f:
+        data = json.load(f)
+    return data
 
 
 def main():
@@ -25,10 +26,10 @@ def main():
     parser.add_argument('-f', '--file', help='path of the json file to read')
     args = parser.parse_args()
     if args.file == None:
-    	json_data = read_stdin()
-    	data = json.loads(json_data)
+        json_data = read_stdin()
+        data = json.loads(json_data)
     else:
-    	data = read_file(args.file)
+        data = read_file(args.file)
 
     value = data.get(args.key, None)
 
