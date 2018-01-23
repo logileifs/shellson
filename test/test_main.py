@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import argparse
 from contextlib import contextmanager
 import unittest
 import mock
@@ -32,10 +33,18 @@ def mock_read_stdin():
 
 class TestMain(unittest.TestCase):
     """unit tests for shellson __main__.py"""
-
+    @mock.patch('argparse.ArgumentParser.parse_args', return_value=argparse.Namespace(command='get', key='param1', file=None))
     @mock.patch('shellson.__main__.read_stdin', new=mock_read_stdin)
-    def test_get(self):
+    def test_get(self, args):
         with captured_output() as (out, err):
-            main('get', 'param1')
+            main()
+            output = out.getvalue().strip()
+        assert json.loads(output) == 'value1'
+
+
+    @mock.patch('argparse.ArgumentParser.parse_args', return_value=argparse.Namespace(command='get', key='param1', file='test/simple.json'))
+    def test_file(self, args):
+        with captured_output() as (out, err):
+            main()
             output = out.getvalue().strip()
         assert json.loads(output) == 'value1'

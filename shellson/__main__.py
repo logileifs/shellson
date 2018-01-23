@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import argparse
 import json
 import sys
 
@@ -12,22 +13,32 @@ def read_stdin():
     return json_data
 
 
-def main(command, key):
-    json_data = read_stdin()
-    data = json.loads(json_data)
-    value = data.get(key, None)
+def read_file(file):
+    with open(file, 'r') as f:
+        data = json.load(f)
+    return data
 
-    if command == 'get':
+
+def main():
+    parser = argparse.ArgumentParser(description='Parse json on command line', prog='shellson')
+    parser.add_argument('command', help='get: to get value or type: to get type of value')
+    parser.add_argument('key')
+    parser.add_argument('-f', '--file', help='path of the json file to read')
+    args = parser.parse_args()
+    if args.file == None:
+        json_data = read_stdin()
+        data = json.loads(json_data)
+    else:
+        data = read_file(args.file)
+
+    value = data.get(args.key, None)
+
+    if args.command == 'get':
         print(json.dumps(value))
 
-    if command == 'type':
+    if args.command == 'type':
         print(str(type(value)))
 
 
 if __name__ == '__main__':
-    try:
-        command = sys.argv[1]
-        key = sys.argv[2]
-    except IndexError:
-        raise SystemExit('no command specified')
-    main(command, key)
+    main()
