@@ -11,3 +11,6 @@ clean:
 
 test:
 	nosetests test/
+
+install:
+	echo "no requirements to install"
