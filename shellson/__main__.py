@@ -24,6 +24,7 @@ def main():
     parser.add_argument('command', help='get: to get value or type: to get type of value')
     parser.add_argument('key')
     parser.add_argument('-f', '--file', help='path of the json file to read')
+    parser.add_argument('-p', '--pretty', dest='pretty', action='store_true', help='activate pretty print')
     args = parser.parse_args()
     if args.file == None:
         json_data = read_stdin()
@@ -32,8 +33,9 @@ def main():
         data = read_file(args.file)
 
     value = data.get(args.key, None)
-
-    if args.command == 'get':
+    if args.command == 'get' and args.pretty:
+        print(json.dumps(value, indent=4))
+    elif args.command == 'get':
         print(json.dumps(value))
 
     if args.command == 'type':
